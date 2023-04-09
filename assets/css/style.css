@@ -198,14 +198,15 @@
 
 }
 
-.footerF {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-  }
 
 label {
     color: rgb(0,53,122);
 }
+
+.footerF {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    }
 
 
