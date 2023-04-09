@@ -24,6 +24,16 @@ proyectosForm.addEventListener('submit', (e) => {
     guardarProyectoStorage(proyectos);
 });  
 
+window.addEventListener('load',()=>{
+    proyectos.forEach(el => {
+        let [dia, mes, anio] = el.fechaFinP.split('/');
+        el.diasRestantesP =
+        Math.ceil((new Date(+anio, +mes - 1, +dia) - new Date())/(1000*60*60*24)) 
+    
+    });
+
+})
+
 const nuevoProyecto = (proyectos) => {
 
     const listaProyectos = document.getElementById("listaProyectos");
