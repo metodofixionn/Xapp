@@ -28,7 +28,7 @@ tareaForm.addEventListener('submit', (e) => {
 
 window.addEventListener('load',()=>{
     tareas.forEach(el => {
-        let [dia, mes, anio] = el.fechaFinal.split('/');
+        let [dia, mes, anio] = el.fechaFin.split('/');
         el.diasRestantes =
         Math.ceil((new Date(+anio, +mes - 1, +dia) - new Date())/(1000*60*60*24)) 
     
