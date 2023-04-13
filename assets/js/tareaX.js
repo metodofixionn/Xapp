@@ -1,55 +1,71 @@
-const tareaForm = document.getElementById('tareaForm');
+const tareaForm = document.getElementById("tareaForm");
 let tareas = [];
 
 let fechaHoy = new Date();
+const fechaActual = new Date().toISOString().slice(0, 10);
+document.getElementById("tiempo").setAttribute("min", fechaActual);
 
-function sumarDias(fecha, dias){
-    fecha.setDate(fecha.getDate() + dias);
-    return fecha;
+function sumarDias(fecha, dias) {
+  fecha.setDate(fecha.getDate() + dias);
+  return fecha;
 }
 
-tareaForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+tareaForm.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-    const form = new FormData(tareaForm);
-    const tareaX = form.get('tareaX');
-    const tiempo = form.get('tiempo');
-    const PrioridadT = form.get('PrioridadT');
-    const tituloT = form.get('tituloTarea');
-    const descripcionT= form.get('descripcionTarea');
-    const fechaActual = fechaHoy.toLocaleDateString();
-    const fechaFin = sumarDias(new Date(), Number(tiempo.split(' ')[0]))
-    const tarea = {tareaX,tiempo,PrioridadT,tituloT,descripcionT, fechaActual: fechaActual, fechaFinal: fechaFin.toLocaleDateString(), diasRestantes: (fechaFin - new Date())/(1000*60*60*24)};
+  const form = new FormData(tareaForm);
+  const tareaX = form.get("tareaX");
+  const tiempo = form.get("tiempo");
+  const PrioridadT = form.get("PrioridadT");
+  const tituloT = form.get("tituloTarea");
+  const descripcionT = form.get("descripcionTarea");
 
-    tareas.push(tarea);
-    nuevaTarea(tareas);
-    guardarTareaStorage(tareas);
-});  
 
-window.addEventListener('load',()=>{
-    tareas.forEach(el => {
-        let [dia, mes, anio] = el.fechaFin.split('/');
-        el.diasRestantes =
-        Math.ceil((new Date(+anio, +mes - 1, +dia) - new Date())/(1000*60*60*24)) 
+
+  const tarea = {
+    tareaX,
+    tiempo,
+    PrioridadT,
+    tituloT,
+    descripcionT,
+    fechaActual: new Date(),
+    fechaFinal: new Date(Date.parse(tiempo)),
+    diasRestantes:  Math.floor((new Date(Date.parse(tiempo)).getTime() - new Date().getTime())/(1000*60*60*24))+2,
+  };
+
+  tareas.push(tarea);
+  nuevaTarea(tareas);
+  guardarTareaStorage(tareas);
+});
+
+window.addEventListener("load", () => {
+
+  const tareasAll = obtenerTareaStorage();
+  tareasAll.forEach((tarea) => {
+   
+    tarea.fechaActual = new Date();
+    // tarea.diasRestantes = (new Date(Date.parse(tarea.fechaFinal)))
+    tarea.diasRestantes = Math.floor((new Date(Date.parse(tarea.fechaFinal)).getTime() - new Date().getTime())/(1000*60*60*24))+2
     
-    });
-
-})
+  });
+  // tareasAll[0].PrioridadT = "5"
+  nuevaTarea(tareasAll)
+  guardarTareaStorage(tareasAll)
+  console.log(tareasAll);
+});
 
 const nuevaTarea = (tareas) => {
+  const listaTareas = document.getElementById("listaTareas");
+  const div = document.createElement("div");
 
-    const listaTareas = document.getElementById("listaTareas");
-    const div = document.createElement("div");
+  listaTareas.innerHTML = "";
 
-    listaTareas.innerHTML = '';
-
-    tareas.forEach(tarea => {
-
-        div.innerHTML += `
+  tareas.forEach((tarea) => {
+    div.innerHTML += `
             <div class="card text-center mb-4">
                 <div class="card-body">
                     <strong class="p-1">Tipo de tarea:</strong> ${tarea.tareaX} <div></div> 
-                    <strong class="p-1">Tiempo de ejecución</strong> ${tarea.tiempo} 
+                    <strong class="p-1">Fecha</strong> ${tarea.tiempo} 
                     <strong class="p-1">Dias restantes:</strong> ${tarea.diasRestantes}
                     <strong class="p-1">Prioridad:</strong> ${tarea.PrioridadT}
                     <strong class="p-1">Título</strong:> ${tarea.tituloT} 
@@ -58,38 +74,38 @@ const nuevaTarea = (tareas) => {
                 </div>
             </div>
         `;
-        listaTareas.appendChild(div);
-    });
+    listaTareas.appendChild(div);
+  });
 
-    document.getElementById('tareaForm').reset();
+  document.getElementById("tareaForm").reset();
 
-    listaTareas.addEventListener('click', (e) => {  
-        borrarTarea(e.target.value);
-    });
+  listaTareas.addEventListener("click", (e) => {
+    borrarTarea(e.target.value);
+  });
 };
 
 const borrarTarea = (tituloT) => {
-    tareas.forEach((tarea, index) => {
-        if (tarea.tituloT === tituloT) {
-            tareas.splice(index, 1);
-        }
-    });
-    nuevaTarea(tareas);
-    guardarTareaStorage(tareas);
+  tareas.forEach((tarea, index) => {
+    if (tarea.tituloT === tituloT) {
+      tareas.splice(index, 1);
+    }
+  });
+  nuevaTarea(tareas);
+  guardarTareaStorage(tareas);
 };
 
 const guardarTareaStorage = (tareas) => {
-    localStorage.setItem('tareas', JSON.stringify(tareas));
+  localStorage.setItem("tareas", JSON.stringify(tareas));
 };
 
 const obtenerTareaStorage = () => {
-    const tareasStorage = JSON.parse(localStorage.getItem('tareas'));
-    return tareasStorage;
+  const tareasStorage = JSON.parse(localStorage.getItem("tareas"));
+  return tareasStorage;
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('tareas')) {
-        tareas = obtenerTareaStorage();
-        nuevaTarea(tareas);
-    }
-})
+document.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("tareas")) {
+    tareas = obtenerTareaStorage();
+    nuevaTarea(tareas);
+  }
+});
