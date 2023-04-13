@@ -42,11 +42,9 @@ window.addEventListener("load", () => {
 
   const tareasAll = obtenerTareaStorage();
   tareasAll.forEach((tarea) => {
-   
     tarea.fechaActual = new Date();
     // tarea.diasRestantes = (new Date(Date.parse(tarea.fechaFinal)))
-    tarea.diasRestantes = Math.floor((new Date(Date.parse(tarea.fechaFinal)).getTime() - new Date().getTime())/(1000*60*60*24))+2
-    
+    tarea.diasRestantes = Math.floor((new Date(Date.parse(tarea.fechaFinal)).getTime() - new Date().getTime())/(1000*60*60*24))+2  
   });
   // tareasAll[0].PrioridadT = "5"
   nuevaTarea(tareasAll)
