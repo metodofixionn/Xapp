@@ -65,10 +65,10 @@ const nuevaTarea = (tareas) => {
             <div class="card text-center mb-4">
                 <div class="card-body">
                     <strong class="p-1">Tipo de tarea:</strong> ${tarea.tareaX} <div></div> 
-                    <strong class="p-1">Fecha</strong> ${tarea.tiempo} 
+                    <strong class="p-1">Fecha:</strong> ${tarea.tiempo} 
                     <strong class="p-1">Dias restantes:</strong> ${tarea.diasRestantes}
                     <strong class="p-1">Prioridad:</strong> ${tarea.PrioridadT}
-                    <strong class="p-1">Título</strong:> ${tarea.tituloT} 
+                    <strong class="p-1">Título:</strong> ${tarea.tituloT} 
                     <strong class="p-1">Descripción:</strong> ${tarea.descripcionT}
                     <button href="#" class="btn btn-outline-info rounded m-2" id="${tarea.tituloT}" name="delete" value="${tarea.tituloT}">Borrar</button>
                 </div>
